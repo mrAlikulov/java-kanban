@@ -1,27 +1,23 @@
 package model;
 
 import java.util.ArrayList;
-public class Epic extends Task {
-    private final ArrayList<Integer> subtaskIds = new ArrayList<>();
+import java.util.List;
 
-    public Epic(String name, String description, int id) {
-        super(name, description, id, Status.NEW);
+public class Epic extends Task{
+    private final List<Integer> subtaskIds = new ArrayList<>();
+
+    public Epic(int id, String name, String description) {
+        super(id,name, description);
     }
 
-    public ArrayList<Integer> getSubtaskIds() {
+    public List<Integer> getSubtaskIds() {
         return subtaskIds;
     }
 
-    public void addSubtaskId(int subtaskId) {
+    public void addSubtask(int subtaskId) {
+        if (subtaskId == this.getId()) {
+            throw new IllegalArgumentException("Эпик не может быть подзадачей самого себя.");
+        }
         subtaskIds.add(subtaskId);
-    }
-
-    public void clearSubtasks() {
-        subtaskIds.clear();
-    }
-
-    @Override
-    public String toString() {
-        return super.toString() + ", subtaskIds=" + subtaskIds;
     }
 }
