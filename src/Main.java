@@ -1,34 +1,45 @@
-import manager.HistoryManager;
-import manager.InMemoryHistoryManager;
-import model.Task;
+
+
+import manager.FileBackedTaskManager;
+import model.*;
+
+import java.io.File;
 
 public class Main {
     public static void main(String[] args) {
-        HistoryManager history = new InMemoryHistoryManager();
+        File file = new File("tasks.csv");
 
-        Task t1 = new Task(1, "Сходить в магазин", "Купить молоко и хлеб");
-        Task t2 = new Task(2, "Сделать ДЗ", "Подготовиться к спринту 6");
-        Task t3 = new Task(3, "Пробежка", "Утренняя пробежка 5 км");
+        FileBackedTaskManager manager = new FileBackedTaskManager(file);
 
-        // Добавляем задачи в историю
-        history.add(t1);
-        history.add(t2);
-        history.add(t3);
 
-        // Повторный просмотр t2 — старый должен исчезнуть
-        history.add(t2);
+        Task task1 = new Task(1, "Проверить почту", "Проверить входящие письма");
+        task1.setStatus(Status.NEW);
+        manager.createTask(task1);
 
-        System.out.println("История:");
-        for (Task t : history.getHistory()) {
+        Epic epic1 = new Epic(2, "Учёба", "Подготовка к экзамену");
+        manager.createEpic(epic1);
+
+        Subtask sub1 = new Subtask(3, "Прочитать лекцию", "Лекция по финансам", epic1.getId());
+        sub1.setStatus(Status.IN_PROGRESS);
+        manager.createSubtask(sub1);
+
+        Subtask sub2 = new Subtask(4, "Сделать конспект", "Краткий пересказ лекции", epic1.getId());
+        sub2.setStatus(Status.DONE);
+        manager.createSubtask(sub2);
+
+        System.out.println("✅ Данные сохранены в файл: " + file.getAbsolutePath());
+
+        // загрузка данные обратно
+        FileBackedTaskManager loaded = FileBackedTaskManager.loadFromFile(file);
+        System.out.println("\n📂 Данные, загруженные из файла:");
+        for (Task t : loaded.getAllTasks()) {
             System.out.println(t);
         }
-
-        // Удаляем задачу 1
-        history.remove(1);
-
-        System.out.println("\nПосле удаления:");
-        for (Task t : history.getHistory()) {
-            System.out.println(t);
+        for (Epic e : loaded.getAllEpics()) {
+            System.out.println(e);
+        }
+        for (Subtask s : loaded.getAllSubtasks()) {
+            System.out.println(s);
         }
     }
 }
