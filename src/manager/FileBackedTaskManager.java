@@ -17,7 +17,7 @@ public class FileBackedTaskManager extends TaskManager {
 
     private final File file;
 
-    public FileBackedTaskManager(File file) {
+    private FileBackedTaskManager(File file) {
         this.file = file;
     }
 
@@ -47,7 +47,7 @@ public class FileBackedTaskManager extends TaskManager {
             }
 
         } catch (IOException e) {
-            throw new RuntimeException("Ошибка сохранения данных в файл: " + file.getAbsolutePath(), e);
+            throw new ManagerSaveException("Ошибка сохранения данных в файл: " + file.getAbsolutePath(), e);
         }
     }
 
@@ -87,7 +87,8 @@ public class FileBackedTaskManager extends TaskManager {
             }
 
         } catch (IOException e) {
-            throw new RuntimeException("Ошибка загрузки данных из файла: " + file.getAbsolutePath(), e);
+            throw new ManagerSaveException("Ошибка загрузки данных из файла: " + file.getAbsolutePath(), e);
+
         }
 
         return manager;

@@ -1,6 +1,7 @@
 
 
 import manager.FileBackedTaskManager;
+import manager.TaskManager;
 import model.*;
 
 import java.io.File;
@@ -9,7 +10,7 @@ public class Main {
     public static void main(String[] args) {
         File file = new File("tasks.csv");
 
-        FileBackedTaskManager manager = new FileBackedTaskManager(file);
+        TaskManager manager = FileBackedTaskManager.loadFromFile(file);
 
 
         Task task1 = new Task(1, "Проверить почту", "Проверить входящие письма");
