@@ -20,9 +20,9 @@ public class InMemoryHistoryManager implements HistoryManager{
         }
     }
 
-    private final Map<Integer, Node> nodeMap = new HashMap<>(); // быстрый доступ
-    private Node head; // первый элемент списка
-    private Node tail; // последний элемент списка
+    private final Map<Integer, Node> nodeMap = new HashMap<>();
+    private Node head;
+    private Node tail;
 
     @Override
     public void add(Task task) {
@@ -35,12 +35,12 @@ public class InMemoryHistoryManager implements HistoryManager{
         if (tail != null) {
             tail.next = newNode;
         } else {
-            head = newNode; // список пустой → это первый элемент
+            head = newNode;
         }
 
         tail = newNode;
 
-        // 3. Записываем в HashMap
+
         nodeMap.put(task.getId(), newNode);
     }
 
@@ -70,13 +70,13 @@ public class InMemoryHistoryManager implements HistoryManager{
         if (prev != null) {
             prev.next = next;
         } else {
-            head = next; // если удаляем первый элемент
+            head = next;
         }
 
         if (next != null) {
             next.prev = prev;
         } else {
-            tail = prev; // если удаляем последний элемент
+            tail = prev;
         }
     }
 }

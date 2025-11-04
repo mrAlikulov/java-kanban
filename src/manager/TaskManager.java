@@ -1,3 +1,10 @@
+package manager;
+
+import model.Epic;
+import model.Status;
+import model.Subtask;
+import model.Task;
+
 import java.util.*;
 public class TaskManager {
     private int currentId = 1;

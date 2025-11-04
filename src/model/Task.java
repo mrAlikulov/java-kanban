@@ -2,14 +2,18 @@ package model;
 
 public class Task {
     private int id;
-    private  String name;
+    private String name;
     private String description;
-    public Task(int id,String name, String description){
+    private Status status; // 🔥 добавляем статус
+
+    public Task(int id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.status = Status.NEW; // по умолчанию новая задача
     }
 
+    // 🟢 Геттеры и сеттеры
     public int getId() {
         return id;
     }
@@ -34,12 +38,21 @@ public class Task {
         this.description = description;
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
-        return "tracker.model.Task{" +
-                "id=" + getId() +
-                ", name='" + getName() + '\'' +
-                ", description='" + getDescription() + '\'' +
+        return "Task{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", status=" + status +
                 '}';
     }
 }
