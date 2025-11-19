@@ -1,13 +1,20 @@
 package model;
 
-public class Subtask extends Task{
+import java.time.Duration;
+import java.time.LocalDateTime;
+
+public class Subtask extends Task {
     private final int epicId;
 
     public Subtask(int id, String name, String description, int epicId) {
         super(id, name, description);
-        if (epicId == this.getId()) {
-            throw new IllegalArgumentException("Подзадача не может быть своим же эпиком.");
-        }
+        this.epicId = epicId;
+    }
+
+    public Subtask(int id, String name, String description,
+                   Status status, LocalDateTime startTime,
+                   Duration duration, int epicId) {
+        super(id, name, description, status, startTime, duration);
         this.epicId = epicId;
     }
 

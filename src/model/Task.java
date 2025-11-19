@@ -1,19 +1,55 @@
 package model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 public class Task {
     private int id;
     private String name;
     private String description;
-    private Status status; // 🔥 добавляем статус
+    private Status status;
+    private LocalDateTime startTime;
+    private Duration duration;
 
     public Task(int id, String name, String description) {
+        this(id, name, description, Status.NEW, null, Duration.ZERO);
+    }
+
+    public Task(int id, String name, String description, Status status,
+                LocalDateTime startTime, Duration duration) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.status = Status.NEW; // по умолчанию новая задача
+        this.status = status;
+        this.startTime = startTime;
+        this.duration = duration;
     }
 
-    // 🟢 Геттеры и сеттеры
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getEndTime() {
+        if (startTime == null || duration == null) {
+            return null;
+        }
+        return startTime.plus(duration);
+    }
+
+
+
     public int getId() {
         return id;
     }
@@ -53,6 +89,8 @@ public class Task {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", status=" + status +
+                ", startTime=" + startTime +
+                ", duration=" + duration +
                 '}';
     }
 }
