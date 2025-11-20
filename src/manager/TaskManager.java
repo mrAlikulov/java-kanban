@@ -1,5 +1,6 @@
 package manager;
 
+import manager.exceptions.TimeOverlapException;
 import model.Epic;
 import model.Subtask;
 import model.Task;
@@ -10,11 +11,11 @@ public interface TaskManager {
 
     int generateId();
 
-    void createTask(Task task);
+    void createTask(Task task)throws TimeOverlapException;
 
     void createEpic(Epic epic);
 
-    void createSubtask(Subtask subtask);
+    void createSubtask(Subtask subtask)throws TimeOverlapException;
 
     List<Task> getAllTasks();
 
@@ -34,11 +35,11 @@ public interface TaskManager {
 
     Subtask getSubtaskById(int id);
 
-    void updateTask(Task task);
+    void updateTask(Task task)throws TimeOverlapException;
 
     void updateEpic(Epic epic);
 
-    void updateSubtask(Subtask subtask);
+    void updateSubtask(Subtask subtask)throws TimeOverlapException;
 
     void deleteTaskById(int id);
 

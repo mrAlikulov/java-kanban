@@ -10,7 +10,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args)throws Exception {
 
         File file = new File("tasks.csv");
         TaskManager manager = FileBackedTaskManager.loadFromFile(file);

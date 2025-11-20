@@ -1,5 +1,6 @@
 package manager;
 
+import manager.exceptions.TimeOverlapException;
 import model.Epic;
 import model.Status;
 import model.Subtask;
@@ -32,12 +33,12 @@ public class InMemoryTaskManager implements TaskManager{
         return currentId++;
     }
 
-    public void createTask(Task task) {
+    public void createTask(Task task) throws TimeOverlapException{
         tasks.put(task.getId(), task);
         if (task.getStartTime() != null && task.getEndTime() != null && hasIntersection(task)) {
 
             tasks.remove(task.getId());
-            throw new IllegalArgumentException("Невозможно создать задачу — пересечение по времени с другой задачей.");
+            throw new TimeOverlapException("Невозможно создать задачу — пересечение по времени с другой задачей.");
         }
 
         addToPrioritizedTasks(task);
@@ -47,11 +48,11 @@ public class InMemoryTaskManager implements TaskManager{
         epics.put(epic.getId(), epic);
     }
 
-    public void createSubtask(Subtask subtask) {
+    public void createSubtask(Subtask subtask) throws TimeOverlapException{
         subtasks.put(subtask.getId(), subtask);
         if (subtask.getStartTime() != null && subtask.getEndTime() != null && hasIntersection(subtask)) {
             subtasks.remove(subtask.getId());
-            throw new IllegalArgumentException("Невозможно создать подзадачу — пересечение по времени с другой задачей.");
+            throw new TimeOverlapException("Невозможно создать подзадачу — пересечение по времени с другой задачей.");
         }
         addToPrioritizedTasks(subtask);
 
@@ -150,7 +151,7 @@ public class InMemoryTaskManager implements TaskManager{
         return subtasks.get(id);
     }
 
-    public void updateTask(Task task) {
+    public void updateTask(Task task) throws TimeOverlapException {
         Task old = tasks.get(task.getId());
 
         removeFromPrioritizedTasks(old);
@@ -158,7 +159,7 @@ public class InMemoryTaskManager implements TaskManager{
         if (task.getStartTime() != null && task.getEndTime() != null && hasIntersection(task)) {
             tasks.put(old.getId(), old);
             addToPrioritizedTasks(old);
-            throw new IllegalArgumentException(
+            throw new TimeOverlapException(
                     "Невозможно обновить задачу — пересечение по времени с другой задачей."
             );
         }
@@ -171,7 +172,7 @@ public class InMemoryTaskManager implements TaskManager{
         updateEpicStatus(epic);
     }
 
-    public void updateSubtask(Subtask subtask) {
+    public void updateSubtask(Subtask subtask) throws TimeOverlapException {
         Subtask old = subtasks.get(subtask.getId());
         removeFromPrioritizedTasks(subtasks.get(subtask.getId()));
 
@@ -179,7 +180,7 @@ public class InMemoryTaskManager implements TaskManager{
         if (subtask.getStartTime() != null && subtask.getEndTime() != null && hasIntersection(subtask)) {
             subtasks.put(old.getId(), old);
             addToPrioritizedTasks(old);
-            throw new IllegalArgumentException("Невозможно обновить подзадачу — пересечение по времени с другой задачей.");
+            throw new TimeOverlapException("Невозможно обновить подзадачу — пересечение по времени с другой задачей.");
         }
         addToPrioritizedTasks(subtask);
 
