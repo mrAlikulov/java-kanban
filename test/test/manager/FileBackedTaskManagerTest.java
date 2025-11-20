@@ -1,5 +1,6 @@
 package test.manager;
 import manager.FileBackedTaskManager;
+import manager.exceptions.TimeOverlapException;
 import model.Epic;
 import model.Status;
 import model.Subtask;
@@ -31,7 +32,7 @@ class FileBackedTaskManagerTest {
 
     // ---------- 1. сохранение и загрузка задачи ----------
     @Test
-    void shouldSaveAndLoadTask() {
+    void shouldSaveAndLoadTask()throws TimeOverlapException {
         Task task = new Task(1, "Test Task", "Desc");
         task.setStartTime(LocalDateTime.of(2024, 1, 1, 10, 0));
         task.setDuration(Duration.ofMinutes(30));
@@ -61,7 +62,7 @@ class FileBackedTaskManagerTest {
 
     // ---------- 3. Epic + Subtask ----------
     @Test
-    void shouldSaveAndLoadEpicWithSubtasks() {
+    void shouldSaveAndLoadEpicWithSubtasks()throws TimeOverlapException {
         Epic epic = new Epic(1, "Epic", "Desc");
         manager.createEpic(epic);
 
@@ -82,7 +83,7 @@ class FileBackedTaskManagerTest {
 
     // ---------- 4. Пересчёт времени эпика ----------
     @Test
-    void shouldRecalculateEpicTimeAfterLoading() {
+    void shouldRecalculateEpicTimeAfterLoading() throws TimeOverlapException{
         Epic epic = new Epic(1, "Epic", "Desc");
         manager.createEpic(epic);
 
@@ -106,7 +107,7 @@ class FileBackedTaskManagerTest {
 
     // ---------- 5. Проверка приоритета задач ----------
     @Test
-    void shouldLoadPrioritizedTasksInOrder() {
+    void shouldLoadPrioritizedTasksInOrder()throws TimeOverlapException {
         Task t1 = new Task(1, "T1", "Desc");
         t1.setStartTime(LocalDateTime.of(2024, 1, 1, 9, 0));
         t1.setDuration(Duration.ofMinutes(30));
@@ -130,13 +131,13 @@ class FileBackedTaskManagerTest {
         Task t1 = new Task(1, "T1", "Desc");
         t1.setStartTime(LocalDateTime.of(2024, 1, 1, 10, 0));
         t1.setDuration(Duration.ofMinutes(60));
-        manager.createTask(t1);
+        assertDoesNotThrow(() -> manager.createTask(t1));
 
         Task t2 = new Task(2, "T2", "Desc");
         t2.setStartTime(LocalDateTime.of(2024, 1, 1, 10, 30));
         t2.setDuration(Duration.ofMinutes(60));
 
-        assertThrows(IllegalArgumentException.class, () -> manager.createTask(t2));
+        assertThrows(TimeOverlapException.class, () -> manager.createTask(t2));
     }
 
     // ---------- 7. Пустой файл ----------

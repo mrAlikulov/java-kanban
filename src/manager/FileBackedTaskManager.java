@@ -118,29 +118,31 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         Duration duration = fields[6].isEmpty() ? null : Duration.ofMinutes(Long.parseLong(fields[6]));
         String epicIdStr = fields[7];
 
-        switch (type) {
-            case "TASK":
-                Task task = new Task(id, name, description);
-                task.setStatus(status);
-                task.setStartTime(startTime);
-                task.setDuration(duration);
-                createTask(task);
-                break;
-
-            case "EPIC":
-                Epic epic = new Epic(id, name, description);
-                epic.setStatus(status);
-                createEpic(epic);
-                break;
-
-            case "SUBTASK":
-                int epicId = Integer.parseInt(epicIdStr);
-                Subtask subtask = new Subtask(id, name, description, epicId);
-                subtask.setStatus(status);
-                subtask.setStartTime(startTime);
-                subtask.setDuration(duration);
-                createSubtask(subtask);
-                break;
+        try {
+            switch (type) {
+                case "TASK" -> {
+                    Task task = new Task(id, name, description);
+                    task.setStatus(status);
+                    task.setStartTime(startTime);
+                    task.setDuration(duration);
+                    createTask(task);
+                }
+                case "EPIC" -> {
+                    Epic epic = new Epic(id, name, description);
+                    epic.setStatus(status);
+                    createEpic(epic);
+                }
+                case "SUBTASK" -> {
+                    int epicId = Integer.parseInt(epicIdStr);
+                    Subtask subtask = new Subtask(id, name, description, epicId);
+                    subtask.setStatus(status);
+                    subtask.setStartTime(startTime);
+                    subtask.setDuration(duration);
+                    createSubtask(subtask);
+                }
+            }
+        } catch (TimeOverlapException e) {
+            throw new ManagerSaveException("Ошибка загрузки данных: пересечение времени задач", e);
         }
     }
 
