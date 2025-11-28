@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 public class InMemoryTaskManager implements TaskManager{
     private int currentId = 1;
+    private final List<Task> history = new ArrayList<>();
     private final Map<Integer, Task> tasks = new HashMap<>();
     private final Map<Integer, Epic> epics = new HashMap<>();
     private final Map<Integer, Subtask> subtasks = new HashMap<>();
@@ -275,6 +276,11 @@ public class InMemoryTaskManager implements TaskManager{
     @Override
     public List<Task> getPrioritizedTasks() {
         return new ArrayList<>(prioritizedTasks);
+    }
+
+    @Override
+    public List<Task> getHistory() {
+        return new ArrayList<>(history);
     }
 
 }
