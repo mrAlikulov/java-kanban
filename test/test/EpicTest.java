@@ -10,7 +10,7 @@ public class EpicTest {
     void shouldAddSubtaskId_WhenValidIdGiven() {
         Epic epic = new Epic(1, "Epic1", "Big task");
 
-        epic.addSubtask(2);
+        epic.addSubtaskId(2);
 
         assertEquals(1, epic.getSubtaskIds().size(), "У эпика должен быть 1 сабтаск");
         assertEquals(2, epic.getSubtaskIds().get(0), "Id сабтаска должен быть 2");
@@ -21,7 +21,7 @@ public class EpicTest {
         Epic epic = new Epic(1, "Epic1", "Big task");
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> epic.addSubtask(1));
+                () -> epic.addSubtaskId(1));
 
         assertEquals("Эпик не может быть подзадачей самого себя.", exception.getMessage());
     }
@@ -29,8 +29,8 @@ public class EpicTest {
     void should_Remove_SubtaskId_When_Subtask_Deleted() {
         Epic epic = new Epic(1, "Epic1", "Big task");
 
-        epic.addSubtask(2);
-        epic.addSubtask(3);
+        epic.addSubtaskId(2);
+        epic.addSubtaskId(3);
 
         // Эмулируем удаление сабтаска с id=2
         epic.getSubtaskIds().remove(Integer.valueOf(2));
